@@ -26,8 +26,9 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 	private final ICooldownService cooldownService;
 	private final IBossBarService bossBarService;
 	private final IWorldPropertyService worldPropertyService;
+	private final IDreamService dreamService;
 
-	public SleepmostCommand(ISleepService sleepService, IMessageService messageService, IUpdateService updateService, IFlagService flagService, IFlagsRepository flagsRepository, IConfigRepository configRepository, ICooldownService cooldownService, IBossBarService bossBarService, IWorldPropertyService worldPropertyService){
+	public SleepmostCommand(ISleepService sleepService, IMessageService messageService, IUpdateService updateService, IFlagService flagService, IFlagsRepository flagsRepository, IConfigRepository configRepository, ICooldownService cooldownService, IBossBarService bossBarService, IWorldPropertyService worldPropertyService, IDreamService dreamService){
 		this.sleepService = sleepService;
 		this.messageService = messageService;
 		this.updateService = updateService;
@@ -37,6 +38,7 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 		this.cooldownService = cooldownService;
 		this.bossBarService = bossBarService;
 		this.worldPropertyService = worldPropertyService;
+		this.dreamService = dreamService;
 		this.registerSubCommands();
 	}
 
@@ -55,9 +57,7 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 		subCommands.put("insomnia", new InsomniaSubCommand(this.sleepService, this.flagsRepository, this.messageService, this.worldPropertyService));
 		subCommands.put("getflag", new GetFlagSubCommand(this.messageService, this.flagsRepository));
 		subCommands.put("resetflag", new ResetFlagSubCommand(this.messageService, this.flagsRepository, this.flagService));
-		
-		//enable when debugging
-		//subCommands.put("test", new TestCommand(this.messageService, this.flagsRepository, this.configRepository));
+		subCommands.put("dream", new DreamSubCommand(this.dreamService, this.messageService));
 	}
 
 
@@ -87,6 +87,7 @@ public class SleepmostCommand implements CommandExecutor, TabCompleter {
 			sender.sendMessage(colorize("&e/sm kick &fkick a player from the bed"));
 			sender.sendMessage(colorize("&e/sm insomnia &fBlock sleeping for the current night"));
 			sender.sendMessage(colorize("&e/sm getflag &fQuickly grab a flag's value in your world"));
+			sender.sendMessage(colorize("&e/sm dream &fOpen up a list of the dream commands"));
 			return true;
 		}
 

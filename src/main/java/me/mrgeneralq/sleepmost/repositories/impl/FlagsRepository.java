@@ -1,4 +1,4 @@
-package me.mrgeneralq.sleepmost.repositories;
+package me.mrgeneralq.sleepmost.repositories.impl;
 
 import me.mrgeneralq.sleepmost.flags.*;
 import me.mrgeneralq.sleepmost.flags.controllers.ConfigFlagController;

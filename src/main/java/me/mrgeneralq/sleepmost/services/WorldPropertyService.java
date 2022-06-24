@@ -2,7 +2,7 @@ package me.mrgeneralq.sleepmost.services;
 
 import me.mrgeneralq.sleepmost.interfaces.IWorldPropertyService;
 import me.mrgeneralq.sleepmost.models.WorldProperty;
-import me.mrgeneralq.sleepmost.repositories.WorldPropertyRepository;
+import me.mrgeneralq.sleepmost.repositories.impl.WorldPropertyRepository;
 import org.bukkit.World;
 
 public class WorldPropertyService implements IWorldPropertyService{

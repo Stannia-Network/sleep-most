@@ -1,6 +1,7 @@
 package me.mrgeneralq.sleepmost.builders;
 
 import me.mrgeneralq.sleepmost.enums.SleepSkipCause;
+import me.mrgeneralq.sleepmost.models.Dream;
 import me.mrgeneralq.sleepmost.statics.ChatColorUtils;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -81,6 +82,13 @@ public class MessageBuilder {
 
     public MessageBuilder setPlayer(String playerName){
         this.message = message.replaceAll("%player%", playerName);
+        return this;
+    }
+
+    public MessageBuilder setDream(Dream dream){
+        this.message = message.replaceAll("%dream%", dream.getName());
+        this.message = message.replaceAll("%dream-type%", dream.getDreamType().toString());
+        this.message = message.replaceAll("%duration%", String.valueOf(dream.getDuration()));
         return this;
     }
 }

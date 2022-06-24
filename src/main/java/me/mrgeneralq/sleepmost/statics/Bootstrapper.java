@@ -2,12 +2,14 @@ package me.mrgeneralq.sleepmost.statics;
 
 import me.mrgeneralq.sleepmost.interfaces.*;
 import me.mrgeneralq.sleepmost.mappers.ConfigMessageMapper;
+import me.mrgeneralq.sleepmost.repositories.impl.*;
 import me.mrgeneralq.sleepmost.services.MessageService;
 import me.mrgeneralq.sleepmost.placeholderapi.PapiExtension;
-import me.mrgeneralq.sleepmost.repositories.*;
 import me.mrgeneralq.sleepmost.services.*;
 import me.mrgeneralq.sleepmost.Sleepmost;
 import org.bukkit.Bukkit;
+
+import java.io.IOException;
 
 public class Bootstrapper {
 
@@ -25,45 +27,35 @@ public class Bootstrapper {
     private BossBarRepository bossBarRepository;
     private IBossBarService bossBarService;
     private IPlayerService playerService;
-
     private WorldPropertyRepository worldPropertyRepository;
     private IWorldPropertyService worldPropertyService;
-
     private MessageRepository messageRepository;
+    private DreamRepository dreamRepository;
+    private IDreamService dreamService;
 
 
     private static Bootstrapper instance;
 
     private Bootstrapper(){ }
 
-    public void initialize(Sleepmost main){
-
-
+    public void initialize(Sleepmost main) throws IOException {
         this.configRepository = new ConfigRepository(main);
         this.configService = new ConfigService(main);
         this.flagsRepository = new FlagsRepository(configRepository);
-
         this.messageRepository = new MessageRepository();
         this.messageService = new MessageService(configRepository, messageRepository, flagsRepository);
-
         this.updateRepository = new UpdateRepository("60623");
         this.updateService = new UpdateService(updateRepository, main, configService);
-
         this.cooldownRepository = new CooldownRepository();
         this.cooldownService = new CooldownService(cooldownRepository, configRepository);
-
-
         this.flagService = new FlagService(flagsRepository, configRepository, configService, messageService);
-
         this.playerService = new PlayerService();
-
         this.sleepService = new SleepService(main, configService, configRepository, flagsRepository, flagService, playerService);
-
         this.worldPropertyRepository = new WorldPropertyRepository();
         this.worldPropertyService = new WorldPropertyService(this.worldPropertyRepository);
-
         this.configMessageMapper = ConfigMessageMapper.getMapper();
         this.configMessageMapper.initialize(main);
+        this.dreamService = new DreamService(new DreamRepository());
 
         //check if boss bars are supported
         if(ServerVersion.CURRENT_VERSION.supportsBossBars()){
@@ -75,11 +67,9 @@ public class Bootstrapper {
         this.flagService.handleProblematicFlags();
 
         //setup PAPI
-
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PapiExtension(main, flagsRepository,sleepService).register();
         }
-
     }
 
     public static Bootstrapper getBootstrapper(){
@@ -145,5 +135,9 @@ public class Bootstrapper {
 
     public IPlayerService getPlayerService() {
         return playerService;
+    }
+
+    public IDreamService getDreamService() {
+        return dreamService;
     }
 }
